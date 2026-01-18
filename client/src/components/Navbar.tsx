@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Coins, User, ChevronDown } from "lucide-react";
+import { Menu, X, Coins, User, ChevronDown, Folder, Users, CreditCard, Settings } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/contexts/AuthContext";
+import { useClerk, useUser,UserButton, SignedOut } from "@clerk/clerk-react";
+// import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -22,9 +23,11 @@ const navLinks = [
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, signOut } = useAuth();
+  // const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const {user} = useUser();
+  const {openSignIn,openSignUp,signOut }=useClerk();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,56 +76,74 @@ export function Navbar() {
           </div>
 
           {/* Right Side */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="flex items-center gap-3">
             {user ? (
               <>
                 {/* Credits */}
                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/50 border border-border/50">
                   <Coins className="w-4 h-4 text-glow-accent" />
-                  <span className="text-sm font-medium">{user.credits}</span>
+                  <span className="text-sm font-medium">credits : ___</span>
                 </div>
 
                 {/* Profile Dropdown */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient-glow flex items-center justify-center">
-                        <User className="w-4 h-4 text-white" />
-                      </div>
-                      <ChevronDown className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 glass-strong">
-                    <DropdownMenuItem onClick={() => navigate("/generations")}>My Generations</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/community")}>Community</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/account")}>Balance / Credits</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => navigate("/account")}>Manage Account</DropdownMenuItem>
-                    <DropdownMenuItem className="text-destructive" onClick={() => { signOut(); navigate("/"); }}>Sign Out</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+     <UserButton afterSignOutUrl="/">
+      <UserButton.MenuItems>
+        <UserButton.Action
+          label="My Generations"
+          labelIcon={<Folder size={16} />}
+          onClick={() => navigate("/generations")}
+        />
+
+        <UserButton.Link
+          label="Community"
+          labelIcon={<Users size={16} />}
+          href="/community"
+        />
+
+        <UserButton.Link
+          label="Balance / Credits"
+          labelIcon={<CreditCard size={16} />}
+          href="/account"
+        />
+
+        {/* <UserButton.Link
+          label="Manage Account"
+          labelIcon={<Settings size={16} />}
+          href="/account"
+        /> */}
+      </UserButton.MenuItems>
+    </UserButton>
+
+
+
               </>
             ) : (
               <>
-                <Button variant="ghost" className="text-muted-foreground hover:text-foreground" onClick={() => navigate("/auth")}>
-                  Sign In
-                </Button>
-                <Button variant="glow" size="default" onClick={() => navigate("/auth")}>
-                  Sign Up
-                </Button>
+<Button
+  onClick={() => openSignIn()}
+  className="hidden lg:flex rounded-xl px-5 py-2.5 
+             bg-white text-black font-medium 
+             shadow-md hover:shadow-lg 
+             transition-all duration-300"
+>
+  Sign In
+</Button>
+
+
+
               </>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <Button
+{ !user &&          <Button
             variant="ghost"
             size="icon"
             className="lg:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
+          </Button>}
         </div>
 
         {/* Mobile Menu */}
@@ -144,13 +165,16 @@ export function Navbar() {
                 </Link>
               ))}
               {!user && (
-                <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border/50">
-                  <Button variant="ghost" className="justify-start" onClick={() => { navigate("/auth"); setIsMobileMenuOpen(false); }}>
-                    Sign In
-                  </Button>
-                  <Button variant="glow" onClick={() => { navigate("/auth"); setIsMobileMenuOpen(false); }}>
-                    Sign Up
-                  </Button>
+                <div className="flex flex-col gap-2   border-t border-border/50">
+<Button
+  onClick={() => { openSignIn(); setIsMobileMenuOpen(false); }}
+  className="justify-start rounded-lg bg-white text-black shadow"
+>
+  Sign In
+</Button>
+
+
+
                 </div>
               )}
             </div>
