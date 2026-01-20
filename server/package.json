@@ -15,6 +15,7 @@
   "dependencies": {
     "@clerk/express": "^1.7.63",
     "@google/genai": "^1.37.0",
+    "@neondatabase/serverless": "^1.0.2",
     "@prisma/adapter-pg": "^7.2.0",
     "@prisma/client": "^7.2.0",
     "axios": "^1.13.2",
@@ -22,7 +23,9 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "form-data": "^4.0.5",
     "multer": "^2.0.2",
+    "openai": "^6.16.0",
     "pg": "^8.17.1"
   },
   "devDependencies": {

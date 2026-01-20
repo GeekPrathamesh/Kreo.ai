@@ -157,7 +157,7 @@ export const dummyGenerationsInfo = [
         userId: 'user_2',
         userPrompt: 'Emphasize the comfort and sound quality of the headphones',
         generatedImage: product4,
-        generatedVideo: generatedVideo2,
+        generatedVideo: "generatedVideo2",
         isGenerating: true,
         isPublished: false,
         createdAt: '2023-03-18T00:00:00.000Z',

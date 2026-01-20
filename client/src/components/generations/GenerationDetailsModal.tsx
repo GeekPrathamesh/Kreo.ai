@@ -12,9 +12,12 @@ interface Props {
   gen: Generation | null;
   onClose: () => void;
   onUpdate: (gen: Generation) => void;
+  onDelete: () => void; 
+    togglePublish: (val: boolean) => void; // 👈 add this
+ 
 }
 
-export default function GenerationDetailsModal({ gen, onClose, onUpdate }: Props) {
+export default function GenerationDetailsModal({ gen, onClose, onUpdate,onDelete,togglePublish }: Props) {
   const [loadingAction, setLoadingAction] = useState(false);
 
   if (!gen) return null;
@@ -115,20 +118,39 @@ export default function GenerationDetailsModal({ gen, onClose, onUpdate }: Props
                 <p className="font-medium text-sm">Publish to Community</p>
                 <p className="text-xs text-muted-foreground">{gen.isPublished ? "Visible to everyone" : "Private to you"}</p>
               </div>
-              <Switch 
-                checked={gen.isPublished} 
-                onCheckedChange={(val) => onUpdate({...gen, isPublished: val})} 
-              />
+              <Switch
+  checked={gen.isPublished}
+  onCheckedChange={(val) => togglePublish(val)}
+/>
+
             </div>
 
-            <div>
-              <Label className="text-xs text-muted-foreground mb-3 block">Uploaded Assets</Label>
-              <div className="flex gap-3">
-                {gen.uploadedImages.map((img, i) => (
-                  <img key={i} src={img} className="w-14 h-14 rounded-lg object-cover border" />
-                ))}
-              </div>
-            </div>
+           <div>
+  <Label className="text-xs text-muted-foreground mb-3 block">Uploaded Assets</Label>
+  <div className="flex gap-3 flex-wrap">
+    {gen.uploadedImages.map((img, i) => (
+      <img
+        key={i}
+        src={img}
+        className="w-14 h-14 rounded-lg object-cover border cursor-pointer hover:opacity-80 transition"
+        onClick={() => window.open(img, "_blank")}   // 👈 open in new tab
+        title="Click to view full size"
+      />
+    ))}
+  </div>
+</div>
+
+{/* Delete Section */}
+<div className="pt-4 border-t">
+  <Button
+    variant="destructive"
+    className="w-full"
+    onClick={onDelete}
+  >
+    Delete Project
+  </Button>
+</div>
+
           </div>
         </div>
       </DialogContent>

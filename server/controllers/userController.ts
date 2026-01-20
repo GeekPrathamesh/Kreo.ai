@@ -62,7 +62,7 @@ export const getToggleprojects=async(req:Request,res:Response)=>{
     const { userId } = req.auth();
     if (!userId) return res.status(401).json({ message: "unauthorized" });
 
-    const projectId = req.params.projectId as string;
+    const projectId = req.params.id as string;
 
     const project = await prisma.project.findFirst({
       where: {

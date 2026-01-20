@@ -6,5 +6,6 @@ const connectionString = `${process.env.DATABASE_URL}`
 
 const adapter = new PrismaPg({ connectionString })
 const prisma = new PrismaClient({ adapter })
+console.log("PRISMA DB:", process.env.DATABASE_URL);
 
 export { prisma }

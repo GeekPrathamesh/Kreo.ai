@@ -19,8 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ProjectCard } from "../components/ProjectCard"; // Import the component we made above
-import {  dummyGenerationsInfo } from "@/assets/assets";
 import { Generation } from "@/utils";
+import { toast } from "sonner";
+import api from "@/lib/axios";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 export default function Community() {
 const [projects, setProjects] = useState<Generation[]>([]);
@@ -28,27 +30,31 @@ const [projects, setProjects] = useState<Generation[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRatio, setSelectedRatio] = useState("all");
   const [viewMode, setViewMode] = useState("masonry");
+const { user, isLoaded } = useUser();
+const { getToken } = useAuth();
 
-  // Function to fetch projects (Simulating API)
-  const fetchProjects = async () => {
+const fetchProjects = async () => {
+  try {
     setIsLoading(true);
-    
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const token = await getToken();
 
-    
+    const { data } = await api.get("/api/project/published");
 
-
-    const dummyGenerations =dummyGenerationsInfo;
-
-    setProjects(dummyGenerations);
+    setProjects(data.projects);
+  } catch (error: any) {
+    toast.error(error?.response?.data?.message || error.message);
+  } finally {
     setIsLoading(false);
-  };
+  }
+};
 
-  // Fetch on mount
-  useEffect(() => {
+// Fetch on mount (after Clerk is ready)
+useEffect(() => {
+  if (isLoaded && user) {
     fetchProjects();
-  }, []);
+  }
+}, [isLoaded, user]);
+
 
   // Filtering Logic
   const filteredProjects = projects.filter((project) => {

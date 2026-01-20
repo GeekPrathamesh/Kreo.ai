@@ -10,7 +10,6 @@ const app = express();
 
 const PORT = process.env.PORT || 9000;
 
-
 //middkeware
 app.use(cors());
 app.post('/api/clerk', express.raw({ type: 'application/json' }),clerkWebhooks)

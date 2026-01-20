@@ -3,12 +3,12 @@ import { verifyWebhook } from "@clerk/express/webhooks";
 import { prisma } from "../configs/prisma.js";
 
 export const clerkWebhooks = async (req: Request, res: Response) => {
-      console.log("CLERK WEBHOOK HIT"); 
+  console.log("CLERK WEBHOOK HIT");
 
   try {
     const evt = await verifyWebhook(req, {
-  signingSecret: process.env.CLERK_WEBHOOK_SECRET!,
-});
+      signingSecret: process.env.CLERK_WEBHOOK_SECRET!,
+    });
     const { data, type } = evt;
 
     switch (type) {
@@ -46,33 +46,34 @@ export const clerkWebhooks = async (req: Request, res: Response) => {
         });
         break;
 
-      case "paymentAttempt.updated": {
-        if (
-          (data.charge_type === "recurring" ||
-            data.charge_type === "checkout") &&
-          data.status === "paid"
-        ) {
-          const credits = {
-            pro: 80,
-            premium: 300,
-          };
+     case "paymentAttempt.updated": {
+  if (
+    (data.charge_type === "recurring" || data.charge_type === "checkout") &&
+    data.status === "paid"
+  ) {
+    const credits = { pro: 80, premium:300};
+    const clerkUserId = data?.payer?.user_id;
+const planId = data?.subscription_items?.[0]?.plan?.slug as keyof typeof credits;
 
-          const clerkUserId = data?.payer?.user_id;
-          const planId = data?.subscription_items?.[0]?.plan?.slug;
 
-          if (!clerkUserId) break;
-          if (planId !== "pro" && planId !== "premium") break;
+    if (planId !== "pro" && planId !== "premium") {
+      return res.status(400).json({ message: "Invalid plan" });
+    }
 
-          await prisma.user.update({
-            where: { id: clerkUserId },
-            data: {
-              credits: { increment: credits[planId] },
-    
-            },
-          });
-        }
-        break;
-      }
+    console.log(planId);
+
+    await prisma.user.update({
+      where: { id: clerkUserId },
+      data: {
+        credits: { increment: credits[planId] },
+      },
+    });
+  }
+  break;
+}
+
+
+
 
       default:
         console.log("Unhandled event type:", type);

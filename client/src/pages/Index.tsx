@@ -6,7 +6,7 @@ import { FAQSection } from "@/components/FAQSection";
 import { CTASection } from "@/components/CTASection";
 import { Footer } from "@/components/Footer";
 import { FeaturesSection } from "@/components/Features";
-import { FeaturesSlider } from "@/components/Featuresslider";
+import { FeaturesSlider } from "@/components/FeaturesSlider";
 
 const Index = () => {
   return (

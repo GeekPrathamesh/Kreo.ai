@@ -12,6 +12,7 @@ import Generations from "./pages/Generations";
 import Pricing from "./pages/Pricing";
 import Account from "./pages/Account";
 import NotFound from "./pages/NotFound";
+import Results from "./pages/Results";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/generations" element={<Generations />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/result/:projectId" element={<Results />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

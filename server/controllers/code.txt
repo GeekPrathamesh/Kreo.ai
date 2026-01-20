@@ -116,23 +116,14 @@ export const createProject = async (req: Request, res: Response) => {
     const img1base64 = loadImage(images[0].path, images[0].mimetype);
     const img2base64 = loadImage(images[1].path, images[1].mimetype);
 
-const prompt = `
-This is a synthetic AI-generated person, not a real human.
-Do not treat this as a real identity.
-Combine the person and product into a realistic photo/video.
+    const prompt = {
+      text: `Combine the person and product into a realistic photo.
 Make the person naturally hold or use the product.
 Match lighting, shadows, scale and perspective.
-Professional studio lighting.
-E-commerce quality photorealistic imagery.
-
-Audio:
-Add clean studio background music, soft and modern.
-Include a natural human voice-over describing the product benefits clearly and confidently.
-No noise, no echo, broadcast-quality sound.
-
-${userPrompt}
-`;
-
+Make the person stand in professional studio lighting.
+Output ecommerce-quality photo realistic imagery.
+${userPrompt}`,
+    };
 
     // generate response by ai model
     const response: any = await ai.models.generateContent({
@@ -234,9 +225,7 @@ export const createVideo = async (req: Request, res: Response) => {
       data: { isGenerating: true },
     });
 
-    const prompt = `The person shown is a fully synthetic AI-generated model, not a real human or celebrity.
-
-Create a professional commercial-style advertisement video.make the person showcase the product as advertisement which is ${project.productName} ${project.productDescription && `and Product Description: ${project.productDescription}`}`;
+    const prompt = `make the person showcase the product which is ${project.productName} ${project.productDescription && `and Product Description: ${project.productDescription}`}`;
 
     const model = "veo-3.1-generate-preview";
 
