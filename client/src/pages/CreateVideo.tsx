@@ -13,15 +13,41 @@ import {
   Loader2,
   Globe,
   Cpu,
-  Zap
+  Zap,
+  CheckCircle2
 } from "lucide-react";
 import { toast } from "sonner";
 import { UploadZone } from "@/components/UploadZone";
 import { useUser, useAuth } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import api from "@/lib/axios";
+import { assets } from "@/assets/assets.ts";
 
-// --- Engaging Facts to show during generation ---
+// --- Import Assets ---
+// Assuming these imports exist as per your prompt
+
+
+const SAMPLE_PRODUCTS = [
+  assets.product1,
+  assets.product2,
+  assets.product3,
+  assets.product4,
+  assets.product5,
+  assets.product6,
+  assets.product7,
+  assets.product8
+
+];
+
+const SAMPLE_MODELS = [
+  assets.model1,
+  assets.model2,
+  assets.model3,
+  assets.model4,
+];
+
+
+// --- Engaging Facts ---
 const LOADING_FACTS = [
   { icon: <Globe className="w-4 h-4" />, text: "Your request just traveled 3,000 miles to our GPU clusters." },
   { icon: <Cpu className="w-4 h-4" />, text: "AI is currently 'denoising' millions of pixels for clarity." },
@@ -38,6 +64,11 @@ export default function CreateVideo() {
   // State
   const [productFile, setProductFile] = useState<File | null>(null);
   const [brandFile, setBrandFile] = useState<File | null>(null);
+  
+  // Track which pre-selected asset is active (for UI highlighting)
+  const [selectedProductAsset, setSelectedProductAsset] = useState<string | null>(null);
+  const [selectedModelAsset, setSelectedModelAsset] = useState<string | null>(null);
+
   const [projectName, setProjectName] = useState("");
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
@@ -56,6 +87,35 @@ export default function CreateVideo() {
     }
     return () => clearInterval(interval);
   }, [isGenerating]);
+
+  // --- Helper to convert URL to File ---
+  const handleAssetSelect = async (
+    url: string, 
+    type: 'product' | 'brand'
+  ) => {
+    try {
+      // 1. Update visual selection state
+      if (type === 'product') setSelectedProductAsset(url);
+      else setSelectedModelAsset(url);
+
+      // 2. Fetch the image and convert to blob
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      // 3. Create a File object
+      const filename = url.split('/').pop() || `sample-${type}.jpg`;
+      const file = new File([blob], filename, { type: blob.type });
+
+      // 4. Update the actual form state
+      if (type === 'product') setProductFile(file);
+      else setBrandFile(file);
+      
+      toast.success(`Selected sample ${type}`);
+    } catch (error) {
+      console.error("Error converting asset to file:", error);
+      toast.error("Failed to load sample asset");
+    }
+  };
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -123,10 +183,52 @@ export default function CreateVideo() {
                     </h2>
                   </div>
 
-                  <div className="space-y-6">
-                    <UploadZone label="Product Image/Video" file={productFile} setFile={setProductFile} />
-                    <UploadZone label="Brand Reference / Model Image" file={brandFile} setFile={setBrandFile} />
+                  {/* --- Product Image Section --- */}
+                  <div className="space-y-4">
+                    <UploadZone 
+                        label="Product Image/Video" 
+                        file={productFile} 
+                        setFile={(f) => {
+                            setProductFile(f);
+                            setSelectedProductAsset(null); // Clear preset selection if user uploads manual
+                        }} 
+                    />
+                    
+                    {/* Asset Slider for Products */}
+                    <div className="space-y-2">
+                        <Label className="text-xs text-muted-foreground uppercase tracking-wider">Or choose a sample product</Label>
+                        <AssetSelector 
+                            assets={SAMPLE_PRODUCTS} 
+                            selected={selectedProductAsset} 
+                            onSelect={(url) => handleAssetSelect(url, 'product')} 
+                        />
+                    </div>
                   </div>
+
+                  <div className="h-px bg-white/10 w-full" />
+
+                  {/* --- Model Image Section --- */}
+                  <div className="space-y-4">
+                    <UploadZone 
+                        label="Brand Reference / Model Image" 
+                        file={brandFile} 
+                        setFile={(f) => {
+                            setBrandFile(f);
+                            setSelectedModelAsset(null); // Clear preset selection if user uploads manual
+                        }} 
+                    />
+
+                    {/* Asset Slider for Models */}
+                    <div className="space-y-2">
+                        <Label className="text-xs text-muted-foreground uppercase tracking-wider">Or choose a sample model</Label>
+                        <AssetSelector 
+                            assets={SAMPLE_MODELS} 
+                            selected={selectedModelAsset} 
+                            onSelect={(url) => handleAssetSelect(url, 'brand')} 
+                        />
+                    </div>
+                  </div>
+
                 </div>
 
                 {/* RIGHT COLUMN: Form Data */}
@@ -228,4 +330,42 @@ export default function CreateVideo() {
       <Footer />
     </div>
   );
+}
+
+// --- Internal Component: Asset Selector ---
+interface AssetSelectorProps {
+    assets: string[];
+    selected: string | null;
+    onSelect: (asset: string) => void;
+}
+
+function AssetSelector({ assets, selected, onSelect }: AssetSelectorProps) {
+    return (
+        <div className="flex gap-3 overflow-x-auto pb-2 pt-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+            {assets.map((asset, idx) => (
+                <button
+                    key={idx}
+                    type="button" // Important to prevent form submission
+                    onClick={() => onSelect(asset)}
+                    className={`
+                        relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200
+                        ${selected === asset 
+                            ? 'border-blue-500 ring-2 ring-blue-500/30 scale-105' 
+                            : 'border-white/5 hover:border-white/20 hover:scale-105 opacity-70 hover:opacity-100'}
+                    `}
+                >
+                    <img 
+                        src={asset} 
+                        alt={`Asset ${idx}`} 
+                        className="w-full h-full object-cover" 
+                    />
+                    {selected === asset && (
+                        <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center backdrop-blur-[1px]">
+                           <CheckCircle2 className="w-5 h-5 text-white drop-shadow-md" />
+                        </div>
+                    )}
+                </button>
+            ))}
+        </div>
+    )
 }

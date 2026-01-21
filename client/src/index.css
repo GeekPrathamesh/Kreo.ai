@@ -260,3 +260,27 @@
     background-position: 100% 50%;
   }
 }
+
+/* Global WebKit Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f0f0f;      /* track color */
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4f46e5, #9333ea); /* thumb color */
+  border-radius: 10px;
+  border: 2px solid #0f0f0f;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6366f1, #a855f7);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

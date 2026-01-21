@@ -5,9 +5,13 @@ import product3 from './product3.jpg'; // sunglasses
 import product4 from './product4.jpg'; // headphone
 import product5 from './product5.jpg'; // speaker
 import product6 from './product6.jpg'; // sneakers
-import product7 from './product7.png'; // trolly bag
+import product7 from './product7.jpg'; // trolly bag
+import product8 from './product8.jpg'; // trolly bag
+
 import model1 from './model1.png'; // model men
-import model2 from './model2.jpg'; // model women
+import model2 from './model2.png'; // model women
+import model3 from './model3.png'; // model women
+import model4 from './model4.png'; // model women
 import generated1 from './generated1.png'; // men with trolly bag
 import generated2 from './generated2.png'; // women with trolly bag
 import generated3 from './generated3.png'; // men with shoes
@@ -24,8 +28,11 @@ export const assets = {
     product5,
     product6,
     product7,
+    product8,
+
     model1,
     model2,
+    model3,model4,
     generated1,
     generated2,
     generated3,
