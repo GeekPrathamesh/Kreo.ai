@@ -11,7 +11,7 @@ import product8 from './product8.jpg'; // trolly bag
 import model1 from './model1.png'; // model men
 import model2 from './model2.png'; // model women
 import model3 from './model3.png'; // model women
-import model4 from './model4.png'; // model women
+import model4 from './model44.png'; // model women
 import generated1 from './generated1.png'; // men with trolly bag
 import generated2 from './generated2.png'; // women with trolly bag
 import generated3 from './generated3.png'; // men with shoes

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Sparkles, Mic, Video, Subtitles, Share2, CheckCircle2 } from "lucide-react";
 import heroMockup from "@/assets/hero-mockup.png";
 import { useNavigate } from "react-router-dom";
+import { useUser, useClerk } from "@clerk/clerk-react";
 
 const features = [
   { icon: Sparkles, label: "AI Actors & Voices" },
@@ -13,15 +14,26 @@ const features = [
 
 export function HeroSection() {
   const navigate = useNavigate();
+  const { isSignedIn } = useUser();
+  const { openSignIn } = useClerk();
   
+  const handleStart = () => {
+    if (isSignedIn) {
+      navigate("/create");
+    } else {
+      openSignIn({
+        afterSignInUrl: "/create",
+        afterSignUpUrl: "/create",
+      });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#030303]">
-      {/* Background Effects - Now static and soft */}
       <div className="absolute inset-0 bg-gradient-dark opacity-40" />
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-glow-accent/5 rounded-full blur-[140px]" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-glow-purple/5 rounded-full blur-[140px]" />
-      
-      {/* Grid Pattern - Kept as requested but with refined opacity */}
+
       <div 
         className="absolute inset-0 opacity-[0.04]"
         style={{
@@ -34,9 +46,7 @@ export function HeroSection() {
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
-          {/* Left Content */}
           <div className="flex flex-col space-y-10">
-            {/* Refined Badge */}
             <div className="inline-flex w-fit items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-glow-accent" />
               <span className="text-[12px] font-semibold tracking-wide uppercase text-neutral-400">
@@ -44,7 +54,6 @@ export function HeroSection() {
               </span>
             </div>
 
-            {/* Headline */}
             <div className="space-y-6">
               <h1 className="text-4xl sm:text-6xl lg:text-5xl xl:text-5xl font-bold leading-[1.05] tracking-tight text-white">
                 Create High-Converting <br />
@@ -59,17 +68,17 @@ export function HeroSection() {
               </p>
             </div>
 
-            {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4">
               <Button 
                 variant="hero" 
                 size="xl" 
-                onClick={() => navigate("/create")}
+                onClick={handleStart}
                 className="bg-white text-black hover:bg-neutral-200 transition-all font-bold px-8 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Start Generating Free
               </Button>
+
               <Button 
                 variant="outline" 
                 size="xl" 
@@ -81,7 +90,6 @@ export function HeroSection() {
               </Button>
             </div>
 
-            {/* Feature Pills - Static and Clean */}
             <div className="flex flex-wrap gap-2 pt-4">
               {features.map((feature) => (
                 <div
@@ -95,12 +103,9 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Right Content - Product Mockup */}
           <div className="relative">
-            {/* Fixed Glow Effect */}
             <div className="absolute inset-0 bg-gradient-to-r from-glow-accent/10 to-glow-purple/10 blur-[100px] rounded-full" />
             
-            {/* Main Card with Premium Border Treatment */}
             <div className="relative rounded-[2.5rem] p-px bg-gradient-to-b from-white/20 to-transparent">
               <div className="relative glass rounded-[2.4rem] p-3 shadow-2xl overflow-hidden bg-black/40">
                 <div className="relative aspect-[4/3] rounded-[1.8rem] overflow-hidden border border-white/10">
@@ -110,7 +115,6 @@ export function HeroSection() {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   
-                  {/* Static Overlays */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                   <div className="absolute top-5 left-5 bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-white">
@@ -135,14 +139,12 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Static Decorative Frames */}
             <div className="absolute -top-6 -right-6 w-24 h-24 border border-white/10 rounded-2xl rotate-12" />
             <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-glow-accent/10 rounded-3xl -rotate-12" />
           </div>
         </div>
       </div>
 
-      {/* Deep Bottom Fade */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#030303] to-transparent" />
     </section>
   );

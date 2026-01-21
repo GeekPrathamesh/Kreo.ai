@@ -134,11 +134,11 @@ export function Navbar() {
                       href="/account"
                     />
 
-                    {/* <UserButton.Link
+                    <UserButton.Link
           label="Manage Account"
           labelIcon={<Settings size={16} />}
           href="/account"
-        /> */}
+        />
                   </UserButton.MenuItems>
                 </UserButton>
               </>
