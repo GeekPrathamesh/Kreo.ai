@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Play, Sparkles, Mic, Video, Subtitles, Share2 } from "lucide-react";
+import { Play, Sparkles, Mic, Video, Subtitles, Share2, CheckCircle2 } from "lucide-react";
 import heroMockup from "@/assets/hero-mockup.png";
+import { useNavigate } from "react-router-dom";
 
 const features = [
   { icon: Sparkles, label: "AI Actors & Voices" },
@@ -11,16 +12,18 @@ const features = [
 ];
 
 export function HeroSection() {
+  const navigate = useNavigate();
+  
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-dark" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-glow-accent/10 rounded-full blur-[120px] animate-float" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-glow-purple/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "3s" }} />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#030303]">
+      {/* Background Effects - Now static and soft */}
+      <div className="absolute inset-0 bg-gradient-dark opacity-40" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-glow-accent/5 rounded-full blur-[140px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-glow-purple/5 rounded-full blur-[140px]" />
       
-      {/* Grid Pattern */}
+      {/* Grid Pattern - Kept as requested but with refined opacity */}
       <div 
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
                            linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
@@ -30,49 +33,62 @@ export function HeroSection() {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          
           {/* Left Content */}
-          <div className="space-y-8">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border-glow-accent/20 animate-fade-in">
-              <span className="w-2 h-2 rounded-full bg-glow-accent animate-pulse" />
-              <span className="text-sm font-medium text-muted-foreground">
-                Trusted by 10,000+ creators
+          <div className="flex flex-col space-y-10">
+            {/* Refined Badge */}
+            <div className="inline-flex w-fit items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-glow-accent" />
+              <span className="text-[12px] font-semibold tracking-wide uppercase text-neutral-400">
+                Trusted by 10,000+ top creators
               </span>
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-4xl xl:text-5xl font-bold leading-[1.1] tracking-tight animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-              Create High-Converting{" "}
-              <span className="text-gradient-accent">UGC Ads</span>{" "}
-              in Minutes with AI
-            </h1>
+            <div className="space-y-6">
+              <h1 className="text-4xl sm:text-6xl lg:text-5xl xl:text-5xl font-bold leading-[1.05] tracking-tight text-white">
+                Create High-Converting <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-glow-accent to-glow-purple">
+                  UGC Ads
+                </span>{" "}
+                with AI
+              </h1>
 
-            {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-lg animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-              Turn your product into scroll-stopping video ads without actors, cameras, or studios.
-            </p>
+              <p className="text-lg sm:text-xl text-neutral-400 max-w-lg leading-relaxed">
+                Turn your product into scroll-stopping video ads without actors, cameras, or studios. Professionally edited in seconds.
+              </p>
+            </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-4 animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-              <Button variant="hero" size="xl">
+            <div className="flex flex-wrap gap-4">
+              <Button 
+                variant="hero" 
+                size="xl" 
+                onClick={() => navigate("/create")}
+                className="bg-white text-black hover:bg-neutral-200 transition-all font-bold px-8 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+              >
                 <Sparkles className="w-5 h-5 mr-2" />
-                Start Generating – It's Free
+                Start Generating Free
               </Button>
-              <Button variant="hero-secondary" size="xl">
+              <Button 
+                variant="outline" 
+                size="xl" 
+                onClick={() => navigate("/generations")}
+                className="border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-sm transition-all"
+              >
                 <Play className="w-5 h-5 mr-2" />
                 View Demos
               </Button>
             </div>
 
-            {/* Feature Pills */}
-            <div className="flex flex-wrap gap-3 pt-4 animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-              {features.map((feature, index) => (
+            {/* Feature Pills - Static and Clean */}
+            <div className="flex flex-wrap gap-2 pt-4">
+              {features.map((feature) => (
                 <div
                   key={feature.label}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/30 border border-border/50 text-sm text-muted-foreground hover:text-foreground hover:border-border transition-all duration-300"
-                  style={{ animationDelay: `${0.5 + index * 0.1}s` }}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/20 border border-white/5 text-[13px] text-neutral-400 hover:border-white/20 transition-colors"
                 >
-                  <feature.icon className="w-4 h-4 text-glow-accent" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-glow-accent" />
                   {feature.label}
                 </div>
               ))}
@@ -80,51 +96,54 @@ export function HeroSection() {
           </div>
 
           {/* Right Content - Product Mockup */}
-          <div className="relative animate-slide-in-right" style={{ animationDelay: "0.3s" }}>
-            {/* Glow Effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-glow-accent/20 to-glow-purple/20 blur-[80px] rounded-3xl" />
+          <div className="relative">
+            {/* Fixed Glow Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-glow-accent/10 to-glow-purple/10 blur-[100px] rounded-full" />
             
-            {/* Main Card */}
-            <div className="relative glass rounded-3xl p-2 shadow-2xl overflow-hidden">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-                {/* Hero Image */}
-                <img 
-                  src={heroMockup} 
-                  alt="AI Video Generation Interface" 
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                
-                {/* Overlay Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
+            {/* Main Card with Premium Border Treatment */}
+            <div className="relative rounded-[2.5rem] p-px bg-gradient-to-b from-white/20 to-transparent">
+              <div className="relative glass rounded-[2.4rem] p-3 shadow-2xl overflow-hidden bg-black/40">
+                <div className="relative aspect-[4/3] rounded-[1.8rem] overflow-hidden border border-white/10">
+                  <img 
+                    src={heroMockup} 
+                    alt="AI Video Generation Interface" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  
+                  {/* Static Overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                {/* Floating UI Elements */}
-                <div className="absolute top-4 left-4 glass px-3 py-1.5 rounded-lg text-xs font-medium animate-float">
-                  AI Generated
-                </div>
-                <div className="absolute top-4 right-4 glass px-3 py-1.5 rounded-lg text-xs font-medium animate-float" style={{ animationDelay: "1s" }}>
-                  9:16 Vertical
-                </div>
-                <div className="absolute bottom-4 left-4 right-4 glass rounded-xl p-4 animate-float" style={{ animationDelay: "2s" }}>
-                  <div className="flex items-center gap-3">
-                    <Mic className="w-5 h-5 text-glow-accent" />
-                    <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
-                      <div className="h-full w-3/4 bg-gradient-to-r from-glow-accent to-glow-purple rounded-full" />
+                  <div className="absolute top-5 left-5 bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-white">
+                    Live Rendering
+                  </div>
+                  
+                  <div className="absolute bottom-5 left-5 right-5 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4">
+                    <div className="flex flex-col gap-3">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">AI Script Analysis</span>
+                        <span className="text-[10px] text-glow-accent">85% Processed</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Mic className="w-4 h-4 text-glow-accent" />
+                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-full w-4/5 bg-gradient-to-r from-glow-accent to-glow-purple" />
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-xs text-muted-foreground">0:28</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 border border-border/30 rounded-2xl rotate-12 animate-float" style={{ animationDelay: "1.5s" }} />
-            <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-glow-accent/20 rounded-3xl -rotate-12 animate-float" style={{ animationDelay: "2.5s" }} />
+            {/* Static Decorative Frames */}
+            <div className="absolute -top-6 -right-6 w-24 h-24 border border-white/10 rounded-2xl rotate-12" />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-glow-accent/10 rounded-3xl -rotate-12" />
           </div>
         </div>
       </div>
 
-      {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      {/* Deep Bottom Fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#030303] to-transparent" />
     </section>
   );
 }

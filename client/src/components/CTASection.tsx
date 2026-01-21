@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function CTASection() {
+  const navigate = useNavigate();
   return (
     <section className="py-24 relative overflow-hidden">
       {/* Background Effects */}
@@ -23,18 +25,27 @@ export function CTASection() {
 
                 {/* Heading */}
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-                  Ready to Transform Your Brand<br className="hidden sm:block" />
+                  Ready to Transform Your Brand
+                  <br className="hidden sm:block" />
                   with UGC Ads?
                 </h2>
 
                 {/* Subtext */}
                 <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-                  Join thousands of brands creating high-converting video ads in minutes.
-                  Start for free, no credit card required.
+                  Join thousands of brands creating high-converting video ads in
+                  minutes. Start for free, no credit card required.
                 </p>
 
                 {/* CTA Button */}
-                <Button variant="hero" size="xl" className="group">
+                <Button
+                  variant="hero"
+                  size="xl"
+                  className="group"
+                  onClick={() => {
+                    window.scrollTo({ top: 0, left: 0 });
+                    navigate("/create");
+                  }}
+                >
                   Start Creating Now
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -46,8 +57,8 @@ export function CTASection() {
                     No credit card required
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                    3 free generations
+                    <div className="w-2 h-2 rounded-full bg-green-500" />3 free
+                    generations
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />

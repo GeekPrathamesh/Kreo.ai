@@ -3,58 +3,58 @@ import { Play } from "lucide-react";
 const demos = [
   { 
     id: 1, 
-    brand: "TechGadget Pro", 
+    brand: "SmartWatch X", 
     style: "Reel", 
-    videoUrl: "https://videos.pexels.com/video-files/3201477/3201477-uhd_1440_2732_25fps.mp4", // Desk setup/Tech
-    poster: "https://images.pexels.com/photos/356056/pexels-photo-356056.jpeg" 
+    videoUrl: "https://videos.pexels.com/video-files/5998047/5998047-hd_1080_1920_30fps.mp4", 
+    poster: "https://images.pexels.com/photos/267394/pexels-photo-267394.jpeg" 
   },
   { 
     id: 2, 
-    brand: "BeautyGlow", 
+    brand: "GlowSkin Serum", 
     style: "Story", 
-    videoUrl: "https://videos.pexels.com/video-files/3327108/3327108-uhd_1440_2732_24fps.mp4", // Skincare/Cream
+    videoUrl: "https://videos.pexels.com/video-files/6621025/6621025-hd_1080_1920_30fps.mp4", 
     poster: "https://images.pexels.com/photos/3762871/pexels-photo-3762871.jpeg"
   },
   { 
     id: 3, 
-    brand: "FitLife Nutrition", 
+    brand: "Fitness Protein", 
     style: "Ad", 
-    videoUrl: "https://videos.pexels.com/video-files/3494713/3494713-uhd_1440_2732_30fps.mp4", // Fitness/Workout
+    videoUrl: "https://videos.pexels.com/video-files/853912/853912-hd_1080_1920_25fps.mp4", 
     poster: "https://images.pexels.com/photos/3757331/pexels-photo-3757331.jpeg"
   },
   { 
     id: 4, 
-    brand: "StyleWear", 
+    brand: "Fashion Apparel", 
     style: "Reel", 
-    videoUrl: "https://videos.pexels.com/video-files/3751023/3751023-uhd_1440_2732_25fps.mp4", // Fashion/Model
+    videoUrl: "https://videos.pexels.com/video-files/5738656/5738656-hd_1080_1920_30fps.mp4", 
     poster: "https://images.pexels.com/photos/3758112/pexels-photo-3758112.jpeg"
   },
   { 
     id: 5, 
-    brand: "HomeChef Kit", 
+    brand: "Coffee Brand", 
     style: "Story", 
-    videoUrl: "https://videos.pexels.com/video-files/2802058/2802058-uhd_1440_2732_24fps.mp4", // Cooking/Kitchen
+    videoUrl: "https://videos.pexels.com/video-files/7130144/7130144-hd_1080_1920_30fps.mp4", 
     poster: "https://images.pexels.com/photos/33242/coffee-cup-beverage-beverage-cup.jpg"
   },
   { 
     id: 6, 
-    brand: "PetCare Plus", 
+    brand: "Pet Food", 
     style: "Ad", 
-    videoUrl: "https://videos.pexels.com/video-files/4064363/4064363-uhd_1440_2732_25fps.mp4", // Cute Pet
+    videoUrl: "https://videos.pexels.com/video-files/4087064/4087064-hd_1080_1920_25fps.mp4", 
     poster: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg"
   },
   { 
     id: 7, 
-    brand: "EcoBottle", 
+    brand: "Eco Water Bottle", 
     style: "Reel", 
-    videoUrl: "https://videos.pexels.com/video-files/4202347/4202347-uhd_1440_2732_25fps.mp4", // Product/Water
+    videoUrl: "https://videos.pexels.com/video-files/5752729/5752729-hd_1080_1920_30fps.mp4", 
     poster: "https://images.pexels.com/photos/1188741/pexels-photo-1188741.jpeg"
   },
   { 
     id: 8, 
-    brand: "GameZone", 
+    brand: "Gaming Gear", 
     style: "Story", 
-    videoUrl: "https://videos.pexels.com/video-files/3163534/3163534-uhd_1440_2732_30fps.mp4", // Gaming Setup
+    videoUrl: "https://videos.pexels.com/video-files/6309065/6309065-hd_1080_1920_30fps.mp4", 
     poster: "https://images.pexels.com/photos/129728/pexels-photo-129728.jpeg"
   },
 ];
