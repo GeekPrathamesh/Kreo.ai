@@ -145,13 +145,13 @@ export function Navbar() {
             ) : (
               <>
                 <Button
-                  onClick={() => openSignIn()}
+                  onClick={() => openSignUp()}
                   className="hidden lg:flex rounded-xl px-5 py-2.5 
              bg-white text-black font-medium 
              shadow-md hover:shadow-lg 
              transition-all duration-300"
                 >
-                  Sign In
+                  Sign Up
                 </Button>
               </>
             )}

@@ -15,18 +15,19 @@ const features = [
 export function HeroSection() {
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
-  const { openSignIn } = useClerk();
-  
+  const { openSignUp} = useClerk();
+
   const handleStart = () => {
     if (isSignedIn) {
       navigate("/create");
     } else {
-      openSignIn({
+      openSignUp({
         afterSignInUrl: "/create",
         afterSignUpUrl: "/create",
       });
     }
   };
+  
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#030303]">
