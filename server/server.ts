@@ -21,6 +21,10 @@ app.use("/api/project",projectRouter);
 app.get('/', (req: Request, res: Response) => {
     res.send('Server is Live!');
 });
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

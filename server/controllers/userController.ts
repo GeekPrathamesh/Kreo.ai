@@ -80,7 +80,7 @@ export const getToggleprojects=async(req:Request,res:Response)=>{
     await prisma.project.update({where:{        id: projectId},data:{isPublished:!project.isPublished}});
     res.json({isPublished:!project.isPublished})
 
-    res.json({ project });
+
     } catch (error:any) {
        res.status(500).json({message:error.message}) 
     }
