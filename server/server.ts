@@ -14,15 +14,15 @@ const PORT = process.env.PORT || 9000;
 app.use(cors());
 app.post('/api/clerk', express.raw({ type: 'application/json' }),clerkWebhooks)
 app.use(express.json());
+app.all("/health", (req, res) => {
+  res.status(200).send("OK");
+});
 app.use(clerkMiddleware())
 
 app.use("/api/user",userRouter);
 app.use("/api/project",projectRouter);
 app.get('/', (req: Request, res: Response) => {
     res.send('Server is Live!');
-});
-app.all("/health", (req, res) => {
-  res.status(200).send("OK");
 });
 
 
