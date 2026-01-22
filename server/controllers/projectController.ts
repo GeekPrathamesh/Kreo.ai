@@ -117,21 +117,32 @@ export const createProject = async (req: Request, res: Response) => {
     const img2base64 = loadImage(images[1].path, images[1].mimetype);
 
 const prompt = `
-This is a synthetic AI-generated person, not a real human.
-Do not treat this as a real identity.
-Combine the person and product into a realistic photo/video.
-Make the person naturally hold or use the product.
-Match lighting, shadows, scale and perspective.
-Professional studio lighting.
-E-commerce quality photorealistic imagery.
+The person in the image must be a fully synthetic, AI-generated model.
+It must NOT represent, resemble, or be based on any real human or celebrity.
+Treat this as a fictional identity only.
 
-Audio:
-Add clean studio background music, soft and modern.
-Include a natural human voice-over describing the product benefits clearly and confidently.
-No noise, no echo, broadcast-quality sound.
+Create a hyper-realistic product showcase image where:
+- The AI model naturally holds, wears, or uses the product.
+- The interaction looks physically correct (grip, posture, weight, contact points).
+- Lighting, shadows, scale, and perspective are perfectly matched between person and product.
+- Skin tones, textures, and material reflections are physically accurate.
+- Studio-grade soft lighting with realistic global illumination.
+- Subtle depth of field for a professional commercial look.
 
+Image Quality:
+- Ultra-photorealistic, 4K, e-commerce / advertisement grade
+- Natural color grading, no oversharpening
+- No artifacts, no distortions, no extra fingers
+- No text, no logos, no watermarks, no UI elements
+
+Compliance:
+This is a fully synthetic AI model.
+Do not imitate, recreate, or resemble any real person or public figure.
+
+Creative Direction:
 ${userPrompt}
 `;
+
 
 
     // generate response by ai model
@@ -234,9 +245,29 @@ export const createVideo = async (req: Request, res: Response) => {
       data: { isGenerating: true },
     });
 
-    const prompt = `The person shown is a fully synthetic AI-generated model, not a real human or celebrity.
+const prompt = `
+The person shown must be a fully synthetic, AI-generated model (not a real human or celebrity).
 
-Create a professional commercial-style advertisement video.make the person showcase the product as advertisement which is ${project.productName} ${project.productDescription && `and Product Description: ${project.productDescription}`}`;
+Generate a high-quality, professional commercial-style advertisement video.
+
+The AI model should:
+- Confidently present and demonstrate the product like a brand ambassador.
+- Speak naturally with clear expressions and persuasive body language.
+- Highlight key benefits and use-cases.
+- Maintain eye contact with the camera and show realistic gestures.
+
+Product Name: ${project.productName}
+${project.productDescription ? `Product Description: ${project.productDescription}` : ""}
+
+Style & Mood:
+- Modern, premium, and trustworthy
+- Studio lighting or lifestyle setting
+- Smooth camera movement (close-ups, mid-shots, product focus)
+- Clean background with subtle motion graphics
+
+End the video with a strong call-to-action, as in a real startup or D2C brand commercial.
+`;
+
 
     const model = "veo-3.1-generate-preview";
 
