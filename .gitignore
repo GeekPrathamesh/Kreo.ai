@@ -1,2 +1,7 @@
 node_modules
+# Env files
 .env
+client/.env
+server/.env
+.env.local
+.env.production
