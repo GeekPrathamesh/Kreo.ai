@@ -28,7 +28,7 @@ export function HeroSection() {
   };
 
   return (
-    <section className=" mt-4 relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-20 bg-[#030303] selection:bg-glow-accent/30">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-36 pb-20 bg-[#030303] selection:bg-glow-accent/30">
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 bg-gradient-dark opacity-40" />
@@ -66,7 +66,7 @@ export function HeroSection() {
 
           {/* Headline */}
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter text-white">
+            <h1 className="text-5xl sm:text-7xl md:text-7xl font-bold tracking-tighter text-white">
               Stop filming. <br className="hidden md:block" />
               Start <span className="text-transparent bg-clip-text bg-gradient-to-r from-glow-accent via-white to-glow-purple animate-gradient-x">generating.</span>
             </h1>
