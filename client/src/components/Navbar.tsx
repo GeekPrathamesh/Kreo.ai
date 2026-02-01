@@ -196,12 +196,12 @@ export function Navbar() {
                 <div className="flex flex-col gap-2   border-t border-border/50">
                   <Button
                     onClick={() => {
-                      openSignIn();
+                      openSignUp();
                       setIsMobileMenuOpen(false);
                     }}
                     className="justify-start rounded-lg bg-white text-black shadow"
                   >
-                    Sign In
+                    Sign Up
                   </Button>
                 </div>
               )}
