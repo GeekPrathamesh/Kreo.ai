@@ -40,7 +40,7 @@ export default function Auth() {
         if (error) {
           toast.error(error);
         } else {
-          toast.success("Account created! Welcome to ugc.ai");
+          toast.success("Account created! Welcome to Kreo.ai");
           navigate("/");
         }
       }
@@ -172,7 +172,7 @@ export default function Auth() {
             <span className="text-5xl font-bold text-white">U</span>
           </div>
           <h2 className="text-4xl font-bold mb-4">
-            ugc<span className="text-glow-accent">.ai</span>
+            Kreo<span className="text-glow-accent">.ai</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-md">
             Transform your products into scroll-stopping video ads with the power of AI

@@ -164,7 +164,7 @@ export default function CreateVideo() {
             <div className="text-center mb-12">
               <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
                 Create Your{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">UGC Video</span>
+                <span className="bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">Kreo Video</span>
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                 Upload your assets and watch our AI transform them into high-converting video content.

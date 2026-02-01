@@ -52,7 +52,7 @@ export function Footer() {
           <div className="col-span-2 space-y-6">
             <Link to="/" className="inline-block">
               <span className="text-2xl font-bold text-foreground">
-                ugc<span className="text-glow-accent">.ai</span>
+                Kreo<span className="text-glow-accent">.ai</span>
               </span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
@@ -148,7 +148,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} ugc.ai. All rights reserved.
+            © {new Date().getFullYear()} Kreo.ai. All rights reserved.
           </p>
 
           {/* Social Links */}

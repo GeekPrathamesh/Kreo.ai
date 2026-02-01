@@ -27,7 +27,7 @@ export function CTASection() {
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
                   Ready to Transform Your Brand
                   <br className="hidden sm:block" />
-                  with UGC Ads?
+                  with Kreo Ads?
                 </h2>
 
                 {/* Subtext */}

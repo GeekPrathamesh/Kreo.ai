@@ -1,21 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Play, Sparkles, Mic, Video, Subtitles, Share2, CheckCircle2 } from "lucide-react";
+import { Play, Sparkles, Mic, Video, Subtitles, Share2, CheckCircle2, ArrowRight } from "lucide-react";
 import heroMockup from "@/assets/hero-mockup.png";
 import { useNavigate } from "react-router-dom";
 import { useUser, useClerk } from "@clerk/clerk-react";
 
 const features = [
-  { icon: Sparkles, label: "AI Actors & Voices" },
-  { icon: Video, label: "Instant UGC Ad Scripts" },
-  { icon: Play, label: "Vertical & Horizontal Formats" },
-  { icon: Subtitles, label: "Auto Subtitles" },
-  { icon: Share2, label: "One-Click Publishing" },
+  { icon: Sparkles, label: "AI Actors" },
+  { icon: Video, label: "Viral Scripts" },
+  { icon: Play, label: "4K Export" },
+  { icon: Subtitles, label: "Auto-Captions" },
 ];
 
 export function HeroSection() {
   const navigate = useNavigate();
   const { isSignedIn } = useUser();
-  const { openSignUp} = useClerk();
+  const { openSignUp } = useClerk();
 
   const handleStart = () => {
     if (isSignedIn) {
@@ -27,126 +26,176 @@ export function HeroSection() {
       });
     }
   };
-  
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-[#030303]">
+    <section className=" mt-4 relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-32 pb-20 bg-[#030303] selection:bg-glow-accent/30">
+      
+      {/* Dynamic Background */}
       <div className="absolute inset-0 bg-gradient-dark opacity-40" />
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-glow-accent/5 rounded-full blur-[140px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-glow-purple/5 rounded-full blur-[140px]" />
-
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-glow-accent/15 rounded-full blur-[120px] -z-10 mix-blend-screen" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1000px] h-[400px] bg-glow-purple/10 rounded-full blur-[120px] -z-10 mix-blend-screen" />
+      
+      {/* Grid Pattern */}
       <div 
-        className="absolute inset-0 opacity-[0.04]"
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px),
-                           linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px'
+                            linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
+          backgroundSize: '50px 50px',
+          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)'
         }}
       />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="container mx-auto px-4 relative z-10 flex flex-col items-center">
+        
+        {/* Main Content Stack */}
+        <div className="flex flex-col items-center text-center space-y-8 max-w-5xl mx-auto mb-12">
           
-          <div className="flex flex-col space-y-10">
-            <div className="inline-flex w-fit items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-glow-accent" />
-              <span className="text-[12px] font-semibold tracking-wide uppercase text-neutral-400">
-                Trusted by 10,000+ top creators
+          {/* Brand Badge */}
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:bg-white/10 transition-colors cursor-default">
+              <span className="flex h-2 w-2 rounded-full bg-glow-accent">
+                <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-glow-accent opacity-75"></span>
               </span>
-            </div>
-
-            <div className="space-y-6">
-              <h1 className="text-4xl sm:text-6xl lg:text-5xl xl:text-5xl font-bold leading-[1.05] tracking-tight text-white">
-                Create High-Converting <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-glow-accent to-glow-purple">
-                  UGC Ads
-                </span>{" "}
-                with AI
-              </h1>
-
-              <p className="text-lg sm:text-xl text-neutral-400 max-w-lg leading-relaxed">
-                Turn your product into scroll-stopping video ads without actors, cameras, or studios. Professionally edited in seconds.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-4">
-              <Button 
-                variant="hero" 
-                size="xl" 
-                onClick={handleStart}
-                className="bg-white text-black hover:bg-neutral-200 transition-all font-bold px-8 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Start Generating Free
-              </Button>
-
-              <Button 
-                variant="outline" 
-                size="xl" 
-                onClick={() => navigate("/generations")}
-                className="border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-sm transition-all"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                View Demos
-              </Button>
-            </div>
-
-            <div className="flex flex-wrap gap-2 pt-4">
-              {features.map((feature) => (
-                <div
-                  key={feature.label}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/20 border border-white/5 text-[13px] text-neutral-400 hover:border-white/20 transition-colors"
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-glow-accent" />
-                  {feature.label}
-                </div>
-              ))}
+              <span className="text-xs font-semibold tracking-widest uppercase text-neutral-300">
+                New: Kreo AI 2.0 is live
+              </span>
+              <ArrowRight className="w-3 h-3 text-neutral-500 ml-1" />
             </div>
           </div>
 
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-glow-accent/10 to-glow-purple/10 blur-[100px] rounded-full" />
-            
-            <div className="relative rounded-[2.5rem] p-px bg-gradient-to-b from-white/20 to-transparent">
-              <div className="relative glass rounded-[2.4rem] p-3 shadow-2xl overflow-hidden bg-black/40">
-                <div className="relative aspect-[4/3] rounded-[1.8rem] overflow-hidden border border-white/10">
-                  <img 
-                    src={heroMockup} 
-                    alt="AI Video Generation Interface" 
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          {/* Headline */}
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter text-white">
+              Stop filming. <br className="hidden md:block" />
+              Start <span className="text-transparent bg-clip-text bg-gradient-to-r from-glow-accent via-white to-glow-purple animate-gradient-x">generating.</span>
+            </h1>
 
-                  <div className="absolute top-5 left-5 bg-black/80 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-white">
-                    Live Rendering
-                  </div>
-                  
-                  <div className="absolute bottom-5 left-5 right-5 bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4">
-                    <div className="flex flex-col gap-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-[10px] text-neutral-400 font-bold uppercase tracking-widest">AI Script Analysis</span>
-                        <span className="text-[10px] text-glow-accent">85% Processed</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Mic className="w-4 h-4 text-glow-accent" />
-                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                          <div className="h-full w-4/5 bg-gradient-to-r from-glow-accent to-glow-purple" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <p className="text-lg sm:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
+              <span className="text-xl font-bold text-foreground tracking-tight group-hover:text-glow transition-all duration-300">
+              Kreo<span className="text-glow-accent">.ai</span>
+            </span> turns your product URL into high-performing video ads with AI actors, viral hooks, and voiceovers. No studio required.
+            </p>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full justify-center pt-2 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+            <Button 
+              variant="default" 
+              size="xl" 
+              onClick={handleStart}
+              className="bg-white text-black hover:bg-neutral-200 hover:scale-105 transition-all duration-300 font-bold px-10 h-14 text-base shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Create Ad with Kreo
+            </Button>
+
+            <Button 
+              variant="outline" 
+              size="xl" 
+              onClick={() => navigate("/generations")}
+              className="border-white/10 bg-white/5 hover:bg-white/10 text-white backdrop-blur-sm transition-all h-14 text-base px-10"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Watch Demo
+            </Button>
+          </div>
+
+          {/* Trust Indicators / Features */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 pt-6 opacity-60 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
+            {features.map((feature) => (
+              <div key={feature.label} className="flex items-center gap-2 text-sm font-medium text-neutral-400">
+                <feature.icon className="w-4 h-4 text-neutral-500" />
+                {feature.label}
               </div>
-            </div>
-
-            <div className="absolute -top-6 -right-6 w-24 h-24 border border-white/10 rounded-2xl rotate-12" />
-            <div className="absolute -bottom-8 -left-8 w-32 h-32 border border-glow-accent/10 rounded-3xl -rotate-12" />
+            ))}
           </div>
         </div>
-      </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#030303] to-transparent" />
+        {/* Dashboard Mockup - The "Product Reveal" */}
+        <div className="relative w-full max-w-6xl mx-auto mt-8 group perspective-[2000px]">
+          
+          {/* Glow behind dashboard */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-glow-accent/20 via-purple-500/20 to-glow-accent/20 rounded-[2.5rem] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-1000" />
+
+          {/* Main Dashboard Container */}
+          <div className="relative rounded-[2rem] border border-white/10 bg-[#0a0a0a]/80 backdrop-blur-xl shadow-2xl overflow-hidden transform transition-transform duration-700 hover:rotate-x-1">
+            
+{/* Content Area */}
+<div className="relative pt-12 px-8 pb-10 text-white">
+  
+  {/* Header */}
+  <h2 className="text-2xl font-semibold tracking-tight mb-3">
+    Create high-converting ads in minutes
+  </h2>
+
+  <p className="text-sm text-neutral-400 max-w-xl mb-8">
+    kreo.ai uses custom-trained AI models to turn your brand assets into 
+    scroll-stopping ads — no editing skills required.
+  </p>
+
+  {/* Steps */}
+  <div className="space-y-6 max-w-xl">
+    
+    <div className="flex gap-4">
+      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-xs font-mono">
+        01
+      </div>
+      <div>
+        <h3 className="text-sm font-medium">Upload your brand assets</h3>
+        <p className="text-xs text-neutral-400">
+          Add product images, logos, or reference creatives. 
+          kreo understands your brand style instantly.
+        </p>
+      </div>
+    </div>
+
+
+
+    <div className="flex gap-4">
+      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-xs font-mono">
+        02
+      </div>
+      <div>
+        <h3 className="text-sm font-medium">Generate ad creatives</h3>
+        <p className="text-xs text-neutral-400">
+          Instantly create Reels, Stories, and Ads optimized for 
+          Instagram, YouTube, and Meta campaigns.
+        </p>
+      </div>
+    </div>
+
+    <div className="flex gap-4">
+      <div className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-xs font-mono">
+        03
+      </div>
+      <div>
+        <h3 className="text-sm font-medium">One-click export & publish</h3>
+        <p className="text-xs text-neutral-400">
+          Download or publish directly in the correct aspect ratio 
+          with captions and hooks included.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  {/* Footer Features */}
+  <div className="mt-10 grid grid-cols-2 gap-4 text-xs text-neutral-400 max-w-xl">
+    <div>✓ Brand-consistent outputs</div>
+    <div>✓ Multiple ad variations</div>
+    <div>✓ Platform-optimized formats</div>
+    <div>✓ No design skills needed</div>
+  </div>
+
+</div>
+
+
+
+          </div>
+        </div>
+
+      </div>
     </section>
   );
 }

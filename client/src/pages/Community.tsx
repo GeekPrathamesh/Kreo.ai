@@ -23,6 +23,7 @@ import { Generation } from "@/utils";
 import { toast } from "sonner";
 import api from "@/lib/axios";
 import { useAuth, useUser } from "@clerk/clerk-react";
+import { log } from "console";
 
 export default function Community() {
 const [projects, setProjects] = useState<Generation[]>([]);
@@ -30,17 +31,17 @@ const [projects, setProjects] = useState<Generation[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRatio, setSelectedRatio] = useState("all");
   const [viewMode, setViewMode] = useState("masonry");
-const { user, isLoaded } = useUser();
-const { getToken } = useAuth();
 
 const fetchProjects = async () => {
   try {
     setIsLoading(true);
-    const token = await getToken();
+
 
     const { data } = await api.get("/api/project/published");
 
     setProjects(data.projects);
+    console.log(data.projects);
+    
   } catch (error: any) {
     toast.error(error?.response?.data?.message || error.message);
   } finally {
@@ -50,10 +51,10 @@ const fetchProjects = async () => {
 
 // Fetch on mount (after Clerk is ready)
 useEffect(() => {
-  if (isLoaded && user) {
+
     fetchProjects();
-  }
-}, [isLoaded, user]);
+  
+},[]);
 
 
   // Filtering Logic

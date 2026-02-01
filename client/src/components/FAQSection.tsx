@@ -7,19 +7,19 @@ import {
 
 const faqs = [
   {
-    question: "What is UGC and why do I need it?",
+    question: "What is Kreo and why do I need it?",
     answer:
-      "UGC (User-Generated Content) style ads are authentic, relatable video advertisements that look like they were created by real customers. They convert up to 4x better than traditional ads because they build trust and feel genuine.",
+      "Kreo is - UGC (User-Generated Content) style ads are authentic, relatable video advertisements that look like they were created by real customers. They convert up to 4x better than traditional ads because they build trust and feel genuine.",
   },
   {
-    question: "How does ugc.ai generate videos?",
+    question: "How does Kreo.ai generate videos?",
     answer:
       "Our AI analyzes your product, generates compelling scripts, selects appropriate AI actors and voices, and produces professional-quality video ads. The entire process takes just minutes, not days.",
   },
   {
     question: "Can I use these videos for paid advertising?",
     answer:
-      "Absolutely! All videos generated with ugc.ai are fully licensed for commercial use, including paid advertising on platforms like Meta, TikTok, YouTube, and more.",
+      "Absolutely! All videos generated with Kreo.ai are fully licensed for commercial use, including paid advertising on platforms like Meta, TikTok, YouTube, and more.",
   },
   {
     question: "What video formats are supported?",

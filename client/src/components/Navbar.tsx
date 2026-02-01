@@ -81,7 +81,7 @@ export function Navbar() {
             className="flex items-center gap-2 group"
           >
             <span className="text-2xl font-bold text-foreground tracking-tight group-hover:text-glow transition-all duration-300">
-              ugc<span className="text-glow-accent">.ai</span>
+              Kreo<span className="text-glow-accent">.ai</span>
             </span>
           </Link>
 
