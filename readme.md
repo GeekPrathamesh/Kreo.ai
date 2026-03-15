@@ -1,4 +1,4 @@
-# Kreo.ai
+# Kreo.ai - Prathamesh Teli
 
 ## Overview
 
