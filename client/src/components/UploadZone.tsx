@@ -15,7 +15,6 @@ import {
   Trash2
 } from "lucide-react";
 import { toast } from "sonner";
-import { useAuth } from "@/contexts/AuthContext";
 interface UploadZoneProps {
   label: string;
   file: File | null;

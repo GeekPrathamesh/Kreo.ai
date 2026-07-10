@@ -1,23 +1,21 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/contexts/AuthContext";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  User, 
+  User as UserIcon, 
   CreditCard, 
   History, 
   Shield, 
   Crown,
-  Check,
   Coins,
   ArrowUpRight
 } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
+import api from "@/lib/axios";
 
 const creditHistory = [
   { id: "1", type: "purchase", amount: 100, description: "Pro Plan Subscription", date: "2025-01-15" },
@@ -33,14 +31,75 @@ const plans = [
 ];
 
 export default function Account() {
-  const { user, signOut } = useAuth();
+  const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [credits, setCredits] = useState<number | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
 
-  if (!user) {
+  const isSignedIn = !!user;
+  const isLoaded = !loading;
+
+  useEffect(() => {
+    if (isSignedIn) {
+      const paymentStatus = searchParams.get("payment");
+      const sessionId = searchParams.get("session_id");
+
+      if (paymentStatus === "success" && sessionId) {
+        verifyStripeSession(sessionId);
+      } else {
+        fetchCredits();
+      }
+    }
+  }, [isSignedIn, searchParams]);
+
+  const verifyStripeSession = async (sessionId: string) => {
+    try {
+      setIsVerifying(true);
+      const { data } = await api.post("/api/stripe/verify-session", { sessionId });
+      if (data?.success) {
+        setCredits(data.credits);
+        toast.success("Payment verified! Credits added successfully.");
+      } else {
+        toast.error("Failed to verify payment session.");
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Error verifying payment session.");
+      console.error("Verification error", error);
+    } finally {
+      setIsVerifying(false);
+      setSearchParams({}); // clean up URL query params
+    }
+  };
+
+  const fetchCredits = async () => {
+    try {
+      const res = await api.get("/api/user/credits");
+      setCredits(res.data.credits);
+    } catch (error) {
+      console.error("Error fetching credits", error);
+    }
+  };
+
+  if (isVerifying) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-dark opacity-40" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#4f39f6]/5 rounded-full blur-[150px] pointer-events-none" />
+        <div className="z-10 flex flex-col items-center text-center p-8 glass-strong rounded-3xl border border-white/10 max-w-sm">
+          <Loader2 className="w-12 h-12 animate-spin text-[#4f39f6] mb-4" />
+          <h2 className="text-xl font-bold mb-2">Verifying Payment</h2>
+          <p className="text-sm text-slate-400">Please wait while we secure your credits from Stripe...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoaded) {
+    return <div className="min-h-screen bg-background flex items-center justify-center">Loading...</div>;
+  }
+
+  if (!isSignedIn) {
     return (
       <div className="min-h-screen bg-background">
         <Navbar />
@@ -48,9 +107,7 @@ export default function Account() {
           <div className="container mx-auto px-6 text-center">
             <h1 className="text-4xl font-bold mb-4">Account Settings</h1>
             <p className="text-muted-foreground mb-8">Please sign in to manage your account</p>
-            <Button variant="hero" onClick={() => navigate("/auth")}>
-              Sign In
-            </Button>
+            {/* The Navbar already has the sign in button, so we just prompt them */}
           </div>
         </main>
         <Footer />
@@ -58,24 +115,9 @@ export default function Account() {
     );
   }
 
-  const handleSaveProfile = () => {
-    toast.success("Profile updated successfully");
-  };
-
-  const handleChangePassword = () => {
-    if (!currentPassword || !newPassword) {
-      toast.error("Please fill in all password fields");
-      return;
-    }
-    toast.success("Password changed successfully");
-    setCurrentPassword("");
-    setNewPassword("");
-  };
-
-  const handleSignOut = () => {
-    signOut();
+  const handleSignOut = async () => {
+    await logout();
     navigate("/");
-    toast.success("Signed out successfully");
   };
 
   return (
@@ -92,7 +134,7 @@ export default function Account() {
           <Tabs defaultValue="profile" className="space-y-8">
             <TabsList className="glass-strong w-full justify-start p-1 h-auto flex-wrap">
               <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-secondary">
-                <User className="w-4 h-4" />
+                <UserIcon className="w-4 h-4" />
                 Profile
               </TabsTrigger>
               <TabsTrigger value="subscription" className="gap-2 data-[state=active]:bg-secondary">
@@ -115,30 +157,25 @@ export default function Account() {
 
             {/* Profile Tab */}
             <TabsContent value="profile" className="glass-strong rounded-2xl p-8">
-              <h2 className="text-2xl font-bold mb-6">Profile Information</h2>
+              <h2 className="text-2xl font-bold mb-6 text-slate-100">Profile Information</h2>
               <div className="space-y-6 max-w-md">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="h-12"
-                  />
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                    <span className="text-2xl font-extrabold text-primary">{user?.name?.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-100">{user?.name}</h3>
+                    <p className="text-sm text-slate-400">Personal Account</p>
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-12"
-                  />
+                <div className="space-y-1">
+                  <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Email Address</p>
+                  <p className="text-sm font-medium text-slate-200">{user?.email}</p>
                 </div>
-                <Button variant="glow" onClick={handleSaveProfile}>
-                  Save Changes
-                </Button>
+                <div className="space-y-1 pt-2">
+                  <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Account ID</p>
+                  <p className="text-sm font-mono text-slate-300">{user?.id}</p>
+                </div>
               </div>
             </TabsContent>
 
@@ -152,7 +189,7 @@ export default function Account() {
                   </div>
                   <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-glow">
                     <Coins className="w-5 h-5 text-white" />
-                    <span className="text-xl font-bold text-white">{user.credits}</span>
+                    <span className="text-xl font-bold text-white">{credits !== null ? credits : "..."}</span>
                     <span className="text-white/80 text-sm">credits</span>
                   </div>
                 </div>
@@ -258,41 +295,11 @@ export default function Account() {
               <h2 className="text-2xl font-bold mb-6">Security Settings</h2>
               
               <div className="space-y-8">
-                <div className="space-y-4 max-w-md">
-                  <h3 className="font-semibold">Change Password</h3>
-                  <div className="space-y-2">
-                    <Label htmlFor="currentPassword">Current Password</Label>
-                    <Input
-                      id="currentPassword"
-                      type="password"
-                      value={currentPassword}
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      className="h-12"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="newPassword">New Password</Label>
-                    <Input
-                      id="newPassword"
-                      type="password"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      className="h-12"
-                    />
-                  </div>
-                  <Button variant="glow" onClick={handleChangePassword}>
-                    Update Password
-                  </Button>
-                </div>
-
                 <div className="border-t border-border pt-8">
                   <h3 className="font-semibold mb-4 text-red-400">Danger Zone</h3>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Button variant="outline" onClick={handleSignOut}>
                       Sign Out
-                    </Button>
-                    <Button variant="destructive">
-                      Delete Account
                     </Button>
                   </div>
                 </div>

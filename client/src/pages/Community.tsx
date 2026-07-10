@@ -22,8 +22,6 @@ import { ProjectCard } from "../components/ProjectCard"; // Import the component
 import { Generation } from "@/utils";
 import { toast } from "sonner";
 import api from "@/lib/axios";
-import { useAuth, useUser } from "@clerk/clerk-react";
-import { log } from "console";
 
 export default function Community() {
 const [projects, setProjects] = useState<Generation[]>([]);
@@ -42,7 +40,7 @@ const fetchProjects = async () => {
     setProjects(data.projects);
     console.log(data.projects);
     
-  } catch (error: any) {
+  } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
     toast.error(error?.response?.data?.message || error.message);
   } finally {
     setIsLoading(false);

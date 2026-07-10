@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Play, Sparkles, Mic, Video, Subtitles, Share2, CheckCircle2, ArrowRight } from "lucide-react";
 import heroMockup from "@/assets/hero-mockup.png";
 import { useNavigate } from "react-router-dom";
-import { useUser, useClerk } from "@clerk/clerk-react";
+import { useAuth } from "@/context/AuthContext";
 
 const features = [
   { icon: Sparkles, label: "AI Actors" },
@@ -13,17 +13,13 @@ const features = [
 
 export function HeroSection() {
   const navigate = useNavigate();
-  const { isSignedIn } = useUser();
-  const { openSignUp } = useClerk();
+  const { user } = useAuth();
 
   const handleStart = () => {
-    if (isSignedIn) {
+    if (user) {
       navigate("/create");
     } else {
-      openSignUp({
-        afterSignInUrl: "/create",
-        afterSignUpUrl: "/create",
-      });
+      navigate("/auth");
     }
   };
 

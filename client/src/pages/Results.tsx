@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
 import { Project } from "@/utils";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/context/AuthContext";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -19,8 +19,8 @@ import {
 
 const Results = () => {
   const { projectId } = useParams();
-  const { getToken } = useAuth();
-  const { user, isLoaded } = useUser();
+  const { user, loading: authLoading } = useAuth();
+  const isLoaded = !authLoading;
   const navigate = useNavigate();
 
   const [projectData, setProjectData] = useState<Project | null>(null);
@@ -32,10 +32,7 @@ const Results = () => {
 
   const fetchProjectdata = async () => {
     try {
-      const token = await getToken();
-      const { data } = await api.get(`/api/user/project/${projectId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.get(`/api/user/project/${projectId}`);
       setProjectData(data.project);
       setIsGenerating(data.project.isGenerating);
       setLoading(false);
@@ -44,7 +41,7 @@ const Results = () => {
       if (!data.project.isGenerating) {
         setIsGenerating(false);
       }
-    } catch (error: any) {
+    } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       toast.error(error?.response?.data?.message || error.message);
     }
   };
@@ -70,11 +67,9 @@ const Results = () => {
     setIsGenerating(true);
     setTimeLeft(120); // Reset timer to 2 mins
     try {
-      const token = await getToken();
       const { data } = await api.post(
         "/api/project/video",
         { projectId },
-        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       setProjectData((prev) =>
@@ -85,7 +80,7 @@ const Results = () => {
 
       toast.success("Your cinematic video is ready!");
       setIsGenerating(false);
-    } catch (error: any) {
+    } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       toast.error(error?.response?.data?.message || error.message);
       setIsGenerating(false);
     }
@@ -236,7 +231,7 @@ const Results = () => {
               <Button
                 onClick={() =>
                   handleDownload(
-                    projectData?.generatedImage!,
+                    projectData?.generatedImage || "",
                     `image-${projectId}.png`,
                   )
                 }
@@ -251,7 +246,7 @@ const Results = () => {
                 disabled={!projectData?.generatedVideo}
                 onClick={() =>
                   handleDownload(
-                    projectData?.generatedVideo!,
+                    projectData?.generatedVideo || "",
                     `video-${projectId}.mp4`,
                   )
                 }

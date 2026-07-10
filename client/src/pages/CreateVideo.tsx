@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { UploadZone } from "@/components/UploadZone";
-import { useUser, useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "@/lib/axios";
 import { assets } from "@/assets/assets.ts";
@@ -57,8 +57,7 @@ const LOADING_FACTS = [
 ];
 
 export default function CreateVideo() {
-  const { user } = useUser();
-  const { getToken } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   // State
@@ -140,14 +139,11 @@ export default function CreateVideo() {
       formData.append("images", productFile);
       formData.append("images", brandFile);
 
-      const token = await getToken();
-      const { data } = await api.post("/api/project/create", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.post("/api/project/create", formData);
 
       toast.success(data.message);
       navigate("/result/" + data.projectId);
-    } catch (error: any) {
+    } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
       setIsGenerating(false);

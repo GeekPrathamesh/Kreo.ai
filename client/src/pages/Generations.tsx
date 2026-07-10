@@ -9,32 +9,28 @@ import { Search, Plus, LayoutGrid, List, Sparkles, Loader2 } from "lucide-react"
 import GenerationRow from "@/components/generations/GenerationRow";
 import GenerationCard from "@/components/generations/GenerationCard";
 import GenerationDetailsModal from "@/components/generations/GenerationDetailsModal";
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/axios";
 import { toast } from "sonner";
 
 export default function Generations() {
-  const { user, isLoaded } = useUser();
-  const { getToken } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"table" | "grid">("grid");
-  const [selectedGeneration, setSelectedGeneration] = useState<any | null>(null);
-  const [generations, setGenerations] = useState<any[]>([]);
+  const [selectedGeneration, setSelectedGeneration] = useState<any /* eslint-disable-line @typescript-eslint/no-explicit-any */ | null>(null);
+  const [generations, setGenerations] = useState<any[] /* eslint-disable-line @typescript-eslint/no-explicit-any */>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchMyGenerations = async () => {
     try {
       setLoading(true);
-      const token = await getToken();
-      const { data } = await api.get("/api/user/projects", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const { data } = await api.get("/api/user/projects");
       setGenerations(data.projects);
       console.log(generations);
 
-    } catch (error: any) {
+    } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       toast.error(error?.response?.data?.message || error.message);
     } finally {
       setLoading(false);
@@ -42,18 +38,17 @@ export default function Generations() {
   };
 
   useEffect(() => {
-    if (isLoaded) {
+    if (!authLoading) {
       if (user) {
         fetchMyGenerations();
-        
       } else {
         setLoading(false);
       }
     }
-  }, [user, isLoaded]);
+  }, [user, authLoading]);
 
-  // 1. Wait for Clerk to load
-  if (!isLoaded) {
+  // 1. Wait for Auth to load
+  if (authLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -89,26 +84,21 @@ export default function Generations() {
 
   const deleteProject = async (id: string) => {
   try {
-    const token = await getToken();
-    await api.delete(`/api/project/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    await api.delete(`/api/project/${id}`);
 
     setGenerations(prev => prev.filter(g => g.id !== id));
     setSelectedGeneration(null);
     toast.success("Project deleted");
-  } catch (error: any) {
+  } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
     toast.error(error?.response?.data?.message || error.message);
   }
 };
 
 const togglePublish = async (id: string, isPublished: boolean) => {
   try {
-    const token = await getToken();
     const { data } = await api.post(
       `/api/user/publish/${id}/`,
-      { isPublished },
-      { headers: { Authorization: `Bearer ${token}` } }
+      { isPublished }
     );
 
     setGenerations(prev =>
@@ -122,7 +112,7 @@ const togglePublish = async (id: string, isPublished: boolean) => {
     }
 
     toast.success(isPublished ? "Published" : "Unpublished");
-  } catch (error: any) {
+  } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
     toast.error(error?.response?.data?.message || error.message);
   }
 };

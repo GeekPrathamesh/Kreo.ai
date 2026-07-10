@@ -13,9 +13,16 @@ import {
   Settings,
 } from "lucide-react";
 
-import { useClerk, useUser, UserButton, useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/axios";
 import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -33,9 +40,8 @@ export function Navbar() {
   // const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useUser();
-  const { openSignIn, openSignUp, signOut } = useClerk();
-  const { pathname } = useLocation();
+  const { user, logout } = useAuth();
+  const pathname = location.pathname;
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -43,16 +49,12 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  const { getToken } = useAuth();
 
   const getUsercredits = async () => {
     try {
-      const token = await getToken();
-      const { data } = await api.get("/api/user/credits", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const { data } = await api.get("/api/user/credits");
       setcredits(data.credits);
-    } catch (error: any) {
+    } catch (error: any /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
       toast.error(error?.response?.data?.message || error.message);
       console.log(error);
     }
@@ -109,49 +111,57 @@ export function Navbar() {
                 {/* Credits */}
                 <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary/50 border border-border/50">
                   <Coins className="w-4 h-4 text-glow-accent" />
-                  <span className="text-sm font-medium">credits : {credits ? credits : 0}
-</span>
+                  <span className="text-sm font-medium">credits : {credits ? credits : 0}</span>
                 </div>
 
                 {/* Profile Dropdown */}
-                <UserButton afterSignOutUrl="/">
-                  <UserButton.MenuItems>
-                    <UserButton.Action
-                      label="My Generations"
-                      labelIcon={<Folder size={16} />}
-                      onClick={() => navigate("/generations")}
-                    />
-
-                    <UserButton.Link
-                      label="Community"
-                      labelIcon={<Users size={16} />}
-                      href="/community"
-                    />
-
-                    <UserButton.Link
-                      label="Balance / Credits"
-                      labelIcon={<CreditCard size={16} />}
-                      href="/account"
-                    />
-
-                    <UserButton.Link
-          label="Manage Account"
-          labelIcon={<Settings size={16} />}
-          href="/account"
-        />
-                  </UserButton.MenuItems>
-                </UserButton>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+                      <Avatar className="h-10 w-10 border border-border">
+                        <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`} alt={user.name} />
+                        <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56 glass-strong border-white/10" align="end" forceMount>
+                    <div className="flex flex-col space-y-1 p-2">
+                      <p className="text-sm font-medium leading-none text-slate-200">{user.name}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                    </div>
+                    <DropdownMenuItem onClick={() => navigate("/generations")} className="cursor-pointer">
+                      <Folder className="mr-2 h-4 w-4" />
+                      <span>My Generations</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/community")} className="cursor-pointer">
+                      <Users className="mr-2 h-4 w-4" />
+                      <span>Community</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/account")} className="cursor-pointer">
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      <span>Balance / Credits</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/account")} className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Manage Account</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout} className="cursor-pointer text-red-500 focus:text-red-500">
+                      <X className="mr-2 h-4 w-4" />
+                      <span>Log Out</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <>
                 <Button
-                  onClick={() => openSignUp()}
+                  onClick={() => navigate("/auth")}
                   className="hidden lg:flex rounded-xl px-5 py-2.5 
              bg-white text-black font-medium 
              shadow-md hover:shadow-lg 
              transition-all duration-300"
                 >
-                  Sign Up
+                  Sign In
                 </Button>
               </>
             )}
@@ -196,12 +206,12 @@ export function Navbar() {
                 <div className="flex flex-col gap-2   border-t border-border/50">
                   <Button
                     onClick={() => {
-                      openSignUp();
+                      navigate("/auth");
                       setIsMobileMenuOpen(false);
                     }}
                     className="justify-start rounded-lg bg-white text-black shadow"
                   >
-                    Sign Up
+                    Sign In
                   </Button>
                 </div>
               )}
