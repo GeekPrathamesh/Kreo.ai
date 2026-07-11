@@ -47,7 +47,7 @@ const fetchProjects = async () => {
   }
 };
 
-// Fetch on mount (after Clerk is ready)
+// Fetch on mount
 useEffect(() => {
 
     fetchProjects();

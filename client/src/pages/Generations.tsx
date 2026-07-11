@@ -56,7 +56,7 @@ export default function Generations() {
     );
   }
 
-  // 2. If Clerk is loaded but no user, show Auth state
+  // 2. If auth is loaded but no user, show Auth state
   if (!user) {
     return (
       <div className="min-h-screen bg-background flex flex-col">
