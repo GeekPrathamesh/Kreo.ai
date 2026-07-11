@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 9000;
 
 // Configure CORS to dynamically allow all origins while supporting credentials
 app.use(cors({
-  origin: (origin, callback) => {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean | string) => void) => {
     // Allow requests with no origin (like mobile apps, curl, etc.)
     if (!origin) return callback(null, true);
     callback(null, origin); // explicitly echoes back the incoming origin string
@@ -31,7 +31,7 @@ app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), strip
 
 app.use(express.json());
 
-app.all("/health", (req, res) => {
+app.all("/health", (req: Request, res: Response) => {
   res.status(200).send("OK");
 });
 
